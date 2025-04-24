@@ -1,7 +1,0 @@
-/home/index.html         -> /
-/school/index.html       -> /school
-/login/index.html        -> /login
-/editor/index.html       -> /editor
-/chat/index.html         -> /chat
-/vercel.json             -> Rewrites clean URLs
-
