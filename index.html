@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DG8AB Study AI - By Dhruv Gowda</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #app {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    input {
+      margin-bottom: 10px;
+      padding: 5px;
+      width: 100%;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+    }
+
+    #studyMaterial {
+      margin-top: 20px;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>DG8AB - Study AI</h1>
+    <p>Created by Dhruv Gowda - youtube.com/@dhruvtheprogrammar</p>
+  </header>
+
+  <div id="app">
+    <label for="grade">Enter your grade:</label>
+    <input type="number" id="grade" placeholder="e.g. 8" required />
+    
+    <label for="subject">Enter your subject:</label>
+    <input type="text" id="subject" placeholder="e.g. Math" required />
+
+    <button onclick="getStudyMaterial()">Get Study Material</button>
+
+    <div id="studyMaterial"></div>
+
+    <button onclick="changeGrade()">Change Grade</button>
+  </div>
+
+  <script>
+    // Save grade in local storage
+    const savedGrade = localStorage.getItem('grade');
+    if (savedGrade) {
+      document.getElementById('grade').value = savedGrade;
+    }
+
+    function getStudyMaterial() {
+      const grade = document.getElementById('grade').value;
+      const subject = document.getElementById('subject').value;
+
+      if (grade && subject) {
+        // Save grade to local storage
+        localStorage.setItem('grade', grade);
+
+        fetch('/get-study-material', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ grade, subject }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('studyMaterial').innerHTML = `
+            <h2>Study Material:</h2>
+            <p>${data.studyMaterial}</p>
+          `;
+        })
+        .catch(error => {
+          document.getElementById('studyMaterial').innerHTML = 'Error fetching study material';
+        });
+      } else {
+        alert('Please enter both grade and subject.');
+      }
+    }
+
+    function changeGrade() {
+      localStorage.removeItem('grade');
+      document.getElementById('grade').value = '';
+    }
+  </script>
+</body>
+</html>
